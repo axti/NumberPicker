@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         final NumberPicker numberPicker = findViewById(R.id.number_picker);
 
         // Set divider color
-        numberPicker.setDividerColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        numberPicker.setDividerColorResource(R.color.colorPrimary);
+//        numberPicker.setDividerColor(ContextCompat.getColor(this, R.color.colorPrimary));
+//        numberPicker.setDividerColorResource(R.color.colorPrimary);
 
         // Set formatter
         numberPicker.setFormatter(getString(R.string.number_picker_formatter));
@@ -33,21 +33,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Set selected text color
         numberPicker.setSelectedTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        numberPicker.setSelectedTextColorResource(R.color.colorPrimary);
+        numberPicker.setSelectedTextColorResource(R.color.colorAccent);
 
         // Set locale
-        numberPicker.setLocale(new Locale("ar")); //comment this line to show the picker in english
+//        numberPicker.setLocale(new Locale("ar")); //comment this line to show the picker in english
 
         // Set selected text size
-        numberPicker.setSelectedTextSize(getResources().getDimension(R.dimen.selected_text_size));
+//        numberPicker.setSelectedTextSize(getResources().getDimension(R.dimen.selected_text_size));
         numberPicker.setSelectedTextSize(R.dimen.selected_text_size);
 
         // Set text color
         numberPicker.setTextColor(ContextCompat.getColor(this, R.color.dark_grey));
-        numberPicker.setTextColorResource(R.color.dark_grey);
+        numberPicker.setTextColorResource(R.color.colorPrimary);
 
         // Set text size
-        numberPicker.setTextSize(getResources().getDimension(R.dimen.text_size));
+//        numberPicker.setTextSize(getResources().getDimension(R.dimen.text_size));
         numberPicker.setTextSize(R.dimen.text_size);
 
         // Set typeface
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         numberPicker.setTypeface(R.string.roboto_light);
 
         // Set value
-        numberPicker.setMaxValue(59);
+        numberPicker.setMaxValue(10);
         numberPicker.setMinValue(0);
         numberPicker.setValue(3);
 
@@ -69,10 +69,12 @@ public class MainActivity extends AppCompatActivity {
 //        numberPicker.setDisplayedValues(data);
 
         // Set fading edge enabled
-        numberPicker.setFadingEdgeEnabled(true);
+        numberPicker.setFadingEdgeEnabled(false);
 
         // Set scroller enabled
         numberPicker.setScrollerEnabled(true);
+
+        numberPicker.setDividerDistance(128);
 
         // Set wrap selector wheel
         numberPicker.setWrapSelectorWheel(true);

@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -1759,7 +1760,7 @@ public class NumberPicker extends LinearLayout {
     protected void onDraw(Canvas canvas) {
         // save canvas
         canvas.save();
-
+        Log.i("test","///----");
         final boolean showSelectorWheel = mHideWheelUntilFocused ? hasFocus() : true;
         float x, y;
         if (isHorizontalMode()) {
@@ -1771,6 +1772,7 @@ public class NumberPicker extends LinearLayout {
         } else {
             x = (getRight() - getLeft()) / 2;
             y = mCurrentScrollOffset;
+            Log.i("test","mCurrentScrollOffset = " + mCurrentScrollOffset);
             if (mRealWheelItemCount < DEFAULT_WHEEL_ITEM_COUNT) {
                 canvas.clipRect(0, mTopDividerTop, getRight(), mBottomDividerBottom);
             }
@@ -1779,9 +1781,10 @@ public class NumberPicker extends LinearLayout {
         // draw the selector wheel
         int[] selectorIndices = getSelectorIndices();
         for (int i = 0; i < selectorIndices.length; i++) {
-            if (i == mWheelMiddleItemIndex) {
+            mSelectorWheelPaint.setTextSize(mTextSize);
+           /* if (i == mWheelMiddleItemIndex) {
                 mSelectorWheelPaint.setTextAlign(Paint.Align.values()[mSelectedTextAlign]);
-                mSelectorWheelPaint.setTextSize(mSelectedTextSize);
+                //mSelectorWheelPaint.setTextSize(mSelectedTextSize);
                 mSelectorWheelPaint.setColor(mSelectedTextColor);
                 mSelectorWheelPaint.setStrikeThruText(mSelectedTextStrikeThru);
                 mSelectorWheelPaint.setUnderlineText(mSelectedTextUnderline);
@@ -1791,8 +1794,25 @@ public class NumberPicker extends LinearLayout {
                 mSelectorWheelPaint.setColor(mTextColor);
                 mSelectorWheelPaint.setStrikeThruText(mTextStrikeThru);
                 mSelectorWheelPaint.setUnderlineText(mTextUnderline);
-            }
+            }*/
 
+            float scale = 1f;
+
+            float offsetToMiddle = Math.abs(y - (mInitialScrollOffset + mWheelMiddleItemIndex * mSelectorElementSize));
+
+
+                scale =
+                        1 * (mSelectorElementSize * 1 - offsetToMiddle) / (mSelectorElementSize * 1) + 1;
+            /*if (offsetToMiddle < mSelectorElementSize / 2) {
+                mSelectorWheelPaint.setColor (mSelectedTextColor);
+            } else {
+                mSelectorWheelPaint.setColor(mTextColor);
+            }*/
+            if (scale < 1)
+                scale = 1;
+            mSelectorWheelPaint.setColor(getEvaluateColor(scale - 1, mTextColor, mSelectedTextColor));
+            Log.i("test", "Item["+i+"] scale=" + scale);
+            Log.i("test", "Item["+i+"] offsetToMiddle=" + offsetToMiddle);
             int selectorIndex = selectorIndices[isAscendingOrder()
                     ? i : selectorIndices.length - i - 1];
             String scrollSelectorValue = mSelectorIndexToStringCache.get(selectorIndex);
@@ -1807,7 +1827,14 @@ public class NumberPicker extends LinearLayout {
                 if (!isHorizontalMode()) {
                     textY += getPaintCenterY(mSelectorWheelPaint.getFontMetrics());
                 }
+                Log.i("test", "Item["+i+"] y=" + y);
+                Log.i("test", "Item["+i+"] textY=" + textY);
+                canvas.save();
+                canvas.scale(scale, scale, x, y);
+//                canvas.drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint);
                 drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
+                canvas.restore();
+//                drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
             }
 
             if (isHorizontalMode()) {
@@ -1815,6 +1842,7 @@ public class NumberPicker extends LinearLayout {
             } else {
                 y += mSelectorElementSize;
             }
+            Log.i("test","///----");
         }
 
         // restore canvas
@@ -1852,6 +1880,28 @@ public class NumberPicker extends LinearLayout {
                 mDividerDrawable.draw(canvas);
             }
         }
+    }
+
+    private int getEvaluateColor(float fraction, int startColor, int endColor) {
+
+        int a, r, g, b;
+
+        int sA = (startColor & 0xff000000) >>> 24;
+        int sR = (startColor & 0x00ff0000) >>> 16;
+        int sG = (startColor & 0x0000ff00) >>> 8;
+        int sB = (startColor & 0x000000ff) >>> 0;
+
+        int eA = (endColor & 0xff000000) >>> 24;
+        int eR = (endColor & 0x00ff0000) >>> 16;
+        int eG = (endColor & 0x0000ff00) >>> 8;
+        int eB = (endColor & 0x000000ff) >>> 0;
+
+        a = (int) (sA + (eA - sA) * fraction);
+        r = (int) (sR + (eR - sR) * fraction);
+        g = (int) (sG + (eG - sG) * fraction);
+        b = (int) (sB + (eB - sB) * fraction);
+
+        return a << 24 | r << 16 | g << 8 | b;
     }
 
     private void drawText(String text, float x, float y, Paint paint, Canvas canvas) {

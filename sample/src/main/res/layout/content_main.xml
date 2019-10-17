@@ -16,10 +16,11 @@
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/number_picker"
+        android:background="@drawable/bg_selector"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
-    <com.shawnlin.numberpicker.NumberPicker
+    <!--<com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/horizontal_number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +38,6 @@
         app:np_textSize="@dimen/text_size"
         app:np_typeface="@string/roboto_light"
         app:np_fadingEdgeEnabled="false"
-        app:np_wrapSelectorWheel="true" />
+        app:np_wrapSelectorWheel="true" />-->
 
 </LinearLayout>
